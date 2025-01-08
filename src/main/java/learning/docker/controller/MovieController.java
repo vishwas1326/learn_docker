@@ -4,7 +4,6 @@ package learning.docker.controller;
 import learning.docker.model.Movie;
 import learning.docker.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
