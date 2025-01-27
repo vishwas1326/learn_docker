@@ -6,8 +6,10 @@ WORKDIR /home/jboss/project
 COPY pom.xml .
 
 USER root
-RUN curl -sSL https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz | tar -xz -C /opt && \
-    ln -s /opt/apache-maven-3.8.8/bin/mvn /usr/bin/mvn \
+RUN microdnf install -y gzip && \
+    curl -sSL https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz | tar -xz -C /opt && \
+    ln -s /opt/apache-maven-3.8.8/bin/mvn /usr/bin/mvn && \
+    microdnf clean all
 
 RUN mvn dependency:go-offline -B
 
