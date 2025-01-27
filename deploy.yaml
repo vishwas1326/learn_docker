@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: learn_docker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learn_docker
+  template:
+    metadata:
+      labels:
+        app: learn_docker
+    spec:
+      containers:
+        - name: learn_docker
+          image: learn_docker-image:latest
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          resources:
+            requests:
+              memory: "180Mi"
+              cpu: "10m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: learn_docker-svc
+spec:
+  ports:
+    - name: http-8081
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: learn_docker
