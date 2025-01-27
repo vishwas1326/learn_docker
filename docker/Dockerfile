@@ -4,10 +4,10 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.15-1.1682053058 AS builder
 RUN mkdir project
 WORKDIR /home/jboss/project
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -B
 
 COPY src src
-RUN mvn package -Dmaven.test.skip=true
+RUN mvn package -Dmaven.test.skip=true -B
 RUN grep version target/maven-archiver/pom.properties | cut -d '=' -f2 >.env-version
 RUN grep artifactId target/maven-archiver/pom.properties | cut -d '=' -f2 >.env-id
 RUN mv target/$(cat .env-id)-$(cat .env-version).jar target/export-run-artifact.jar
