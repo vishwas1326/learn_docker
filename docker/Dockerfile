@@ -4,6 +4,11 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.15-1.1682053058 AS builder
 RUN mkdir project
 WORKDIR /home/jboss/project
 COPY pom.xml .
+
+USER root
+RUN curl -sSL https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz | tar -xz -C /opt && \
+    ln -s /opt/apache-maven-3.8.8/bin/mvn /usr/bin/mvn \
+
 RUN mvn dependency:go-offline -B
 
 COPY src src
