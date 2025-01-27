@@ -1,15 +1,15 @@
 FROM registry.access.redhat.com/ubi8/openjdk-17:1.15-1.1682053058 AS builder
 
+USER root
+RUN microdnf install -y gzip && \
+    curl -sSL https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz | tar -xz -C /opt && \
+    if [ ! -f /usr/bin/mvn ]; then ln -s /opt/apache-maven-3.8.8/bin/mvn /usr/bin/mvn; fi && \
+    microdnf clean all
+
 # Build dependency offline to streamline build
 RUN mkdir project
 WORKDIR /home/jboss/project
 COPY pom.xml .
-
-USER root
-RUN microdnf install -y gzip && \
-    curl -sSL https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz | tar -xz -C /opt && \
-    ln -s /opt/apache-maven-3.8.8/bin/mvn /usr/bin/mvn && \
-    microdnf clean all
 
 RUN mvn dependency:go-offline -B
 
